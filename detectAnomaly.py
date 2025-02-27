@@ -2,9 +2,10 @@ from getToken import APIClient
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 import sys
+import os
 
 ## Pass API key from terminal or environmental variable
-API_KEY = sys.argv[1]
+API_KEY = os.getenv("API_KEY")
 AUTH_URL = "https://api.verkada.com/token"
 BASE_URL = "https://api.verkada.com/events/v1/"
 
