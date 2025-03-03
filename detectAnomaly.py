@@ -49,9 +49,9 @@ present = dt.timestamp()
 
 ## Connect to API
 client = APIClient(API_KEY, AUTH_URL, BASE_URL)
-endpoint = f"access?start_time={then}&page_size=100&event_type=door_keycard_entered_rejected"
-response = client.make_request(endpoint)
-eventList = response['events']
+eventEndpoint = f"access?start_time={then}&page_size=100&event_type=door_keycard_entered_rejected"
+eventResponse = client.make_request(eventEndpoint)
+eventList = eventResponse['events']
 deviceList = defaultdict(int)
 
 ## Process events
