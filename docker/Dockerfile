@@ -7,7 +7,8 @@ ENV REPO_URL="https://github.com/2LargeFeet/VAnomalyDetection.git"
 ENV SCRIPT_PATH="/app/detectAnomaly.py"
 
 # Install dependencies
-RUN apt-get update && apt-get install -y git cron && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+RUN pip3 install requests
 
 # Set up the working directory
 WORKDIR /app
@@ -15,10 +16,5 @@ WORKDIR /app
 # Clone the repo
 RUN git clone $REPO_URL /app
 
-# Add the script to cron (runs every 5 minutes)
-RUN echo "*/5 * * * * root cd /app && git pull && python3 $SCRIPT_PATH" > /etc/cron.d/mycron \
-    && chmod 0644 /etc/cron.d/mycron \
-    && crontab /etc/cron.d/mycron
-
-# Start cron and keep container running
-CMD ["cron", "-f"]
+# Run app
+CMD [ "python", detectAnomaly.py ]
