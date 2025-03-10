@@ -17,4 +17,4 @@ WORKDIR /app
 RUN git clone $REPO_URL /app
 
 # Run app
-CMD [ "python", detectAnomaly.py ]
+CMD [ "python", "detectAnomaly.py" ]
