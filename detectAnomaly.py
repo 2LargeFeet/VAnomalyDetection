@@ -10,7 +10,8 @@ import time
 API_KEY = os.getenv("API_KEY")
 TEAMS_WEBHOOK = os.getenv("TEAMS_WEBHOOK")
 AUTH_URL = "https://api.verkada.com/token"
-BASE_URL = "https://api.verkada.com/events/v1/"
+BASE_URL = "https://api.verkada.com"
+CAMERA_URL = "https://api.verkada.com/cameras/v1/"
 
 ## Manage notifications
 def sendTeamsNotification(notification):
@@ -50,17 +51,26 @@ def detectAnomalies():
     present = dt.timestamp()
     ## Connect to API
     client = APIClient(API_KEY, AUTH_URL, BASE_URL)
-    eventEndpoint = f"access?start_time={then}&page_size=100&event_type=door_keycard_entered_rejected"
+    eventEndpoint = f"/events/v1/access?start_time={then}&page_size=100&event_type=door_keycard_entered_rejected"
     eventResponse = client.make_request(eventEndpoint)
     eventList = eventResponse['events']
+    cameraEndpoint = "devices?page_size=100"
+    cameraResponse = client.make_request(cameraEndpoint)
     deviceList = defaultdict(int)
+    locationList = {}
     ## Process events
+    ## Process excessive denies"
     for event in eventList:
         deviceList[event["device_id"]] += 1
     for device in deviceList:
         if deviceList[device] > 4:
             notification = f"Too many auth failures on {device}"
             sendTeamsNotification(notification)
+    ## Process improbably access by location
+    ## Requires cameras in the same site as access control
+    for event in eventList:
+        
+        locationList[event]
 
 def application():
     while True:
