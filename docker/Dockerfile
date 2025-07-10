@@ -4,6 +4,7 @@ FROM python:3.9-slim
 # Set environment variables
 ENV API_KEY=${API_KEY}
 ENV REPO_URL="https://github.com/2LargeFeet/VAnomalyDetection.git"
+ENV BRANCH=time_anomaly
 ENV SCRIPT_PATH="/app/detectAnomaly.py"
 
 # Install dependencies
@@ -14,7 +15,7 @@ RUN pip3 install requests
 WORKDIR /app
 
 # Clone the repo
-RUN git clone $REPO_URL /app
+RUN git clone --branch $BRANCH --single-branch $REPO_URL /app
 
 # Run app
 CMD [ "python", "detectAnomaly.py" ]
